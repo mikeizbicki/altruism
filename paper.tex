@@ -64,6 +64,17 @@
   publisher={JSTOR}
 }
 
+@article{mclaren2006computational,
+  title={Computational models of ethical reasoning: Challenges, initial steps, and future directions},
+  author={McLaren, Bruce M},
+  journal={IEEE intelligent systems},
+  volume={21},
+  number={4},
+  pages={29--37},
+  year={2006},
+  publisher={IEEE}
+}
+
 @article{edlin2007voting,
   title={Voting as a rational choice: Why and how people vote to improve the well-being of others},
   author={Edlin, Aaron and Gelman, Andrew and Kaplan, Noah},
@@ -84,6 +95,30 @@
   pages={813--827},
   year={2007},
   publisher={Wiley Online Library}
+}
+
+@inproceedings{chevaleyre2007short,
+  title={A short introduction to computational social choice},
+  author={Chevaleyre, Yann and Endriss, Ulle and Lang, J{\'e}r{\^o}me and Maudet, Nicolas},
+  booktitle={International Conference on Current Trends in Theory and Practice of Computer Science},
+  pages={51--69},
+  year={2007},
+  organization={Springer}
+}
+
+@inproceedings{arkin2008governing,
+  title={Governing lethal behavior: embedding ethics in a hybrid deliberative/reactive robot architecture},
+  author={Arkin, Ronald C},
+  booktitle={Proceedings of the 3rd ACM/IEEE international conference on Human robot interaction},
+  pages={121--128},
+  year={2008},
+  organization={ACM}
+}
+
+@article{arkin2008governing,
+  title={Governing Lethal Behavior: Embedding Ethics in a Hybrid Deliberative/Reactive Robot Architecture},
+  year=2008,
+  author={Arkin, Ronald C}
 }
 
 @article{gerber2009descriptive,
@@ -130,6 +165,17 @@
   publisher={Wiley Online Library}
 }
 
+@article{sharkey2012granny,
+  title={Granny and the robots: ethical issues in robot care for the elderly},
+  author={Sharkey, Amanda and Sharkey, Noel},
+  journal={Ethics and information technology},
+  volume={14},
+  number={1},
+  pages={27--40},
+  year={2012},
+  publisher={Springer}
+}
+
 @article{mcmurray2012aggregating,
   title={Aggregating information by voting: The wisdom of the experts versus the wisdom of the masses},
   author={McMurray, Joseph C},
@@ -137,6 +183,18 @@
   pages={rds026},
   year={2012},
   publisher={Oxford University Press}
+}
+
+@article{sotala2015responses
+  author={Kaj Sotala and Roman V Yampolskiy},
+  title={Responses to catastrophic AGI risk: a survey},
+  journal={Physica Scripta},
+  volume={90},
+  number={1},
+  pages={018001},
+  url={http://stacks.iop.org/1402-4896/90/i=1/a=018001},
+  year={2015},
+  abstract={Many researchers have argued that humanity will create artificial general intelligence (AGI) within the next twenty to one hundred years. It has been suggested that AGI may inflict serious damage to human well-being on a global scale (‘catastrophic risk’). After summarizing the arguments for why AGI may pose such a risk, we review the fieldʼs proposed responses to AGI risk. We consider societal proposals, proposals for external constraints on AGI behaviors and proposals for creating AGIs that are safe due to their internal design.}
 }
 \end{filecontents}
 \immediate\write18{bibtex paper}
@@ -274,6 +332,8 @@ Furthermore, when someone becomes more informed, they cause other people to beco
 
 Is auction theory relevant?
 
+\cite{chevaleyre2007short} surveys computational social choice theory.
+
 \cite{edlin2007voting} makes the case that non-selfish behavior motivates voters, and this results in good voter turnout.
 
 \cite{fowler2007beyond} discuss a model that distinguishes ``altruistic'' social interactions and ``identity'' social actions.
@@ -288,6 +348,18 @@ They provide both a theoretical model and experiments.
 They present a psychological model called the Model of Frame Selection to justify their claim.
 
 \cite{gelman2012probability} calculate the probability that an individual vote makes a difference in the 2008 US election based on survey data.
+
+\cite{mclaren2006computational} overviews several software projects related to assisting humans to make ethical decisions.
+
+\cite{arkin2008governing} discusses the philosophical reasons why robots should be allowed to autonomously kill in combat scenarios.
+The follow up technical report \citet{arkin2008governing} discusses implementation details.
+The paper focuses on how rule based systems can ensure that the robots are meeting the requirements of the laws of war and just war theories.
+Not all practical examples include war.
+For example \cite{sharkey2012granny} considers the issue of robotic care for the elderly.
+They cite how the loss functions of a robot need to be tuned to meet the elderly's needs ethically.
+
+\cite{sotala2015responses} provide a survey of how to handle the singularity from an ethical perspective.
+
 \bibliographystyle{plainnat}
 \bibliography{paper}
 
