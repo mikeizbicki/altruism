@@ -1,0 +1,294 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{hyperref}
+\usepackage[round]{natbib}   % omit 'round' option if you prefer square brackets
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
+
+\newcommand{\loss}{\ell}
+\newcommand{\sloss}{S}
+\newcommand{\slossave}{\sloss^{\textit{ave}}}
+\newcommand{\slossmax}{\sloss^{\textit{max}}}
+\newcommand{\slossvar}{\sloss^\textit{var}}
+\newcommand{\slossvarp}{\sloss^\textit{varp}}
+
+\newcommand{\x}{x}
+\newcommand{\xstar}{\x^*}
+\newcommand{\xhat}{\hat\x}
+\newcommand{\xhats}{\xhat^s}
+\newcommand{\xhatn}{\xhat^{\textit{naive}}}
+\newcommand{\xhato}{\xhat^{\textit{oracle}}}
+\newcommand{\xhatr}{\xhat^{\textit{rational}}}
+\newcommand{\V}{V}
+\newcommand{\Vhat}{\hat\V}
+
+\newcommand{\T}{T}
+\newcommand{\Tfptp}{\T^{\textit{fptp}}}
+
+\newcommand{\D}{\mathbb{D}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Rnn}{\R_{\ge0}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{amsthm}
+\makeatletter
+\def\th@definition{%
+  \thm@notefont{}% same as heading font
+  \normalfont % body font
+}
+\makeatother
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{conj}{Conjecture}
+\theoremstyle{definition}
+\newtheorem{problem}{Problem}
+\newtheorem{defn}{Definition}
+\newtheorem{note}{Note}
+\newtheorem{example}{Example}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{filecontents}{paper.bib}
+@article{feddersen1996swing,
+  title={The swing voter's curse},
+  author={Feddersen, Timothy J and Pesendorfer, Wolfgang},
+  journal={The American economic review},
+  pages={408--424},
+  year={1996},
+  publisher={JSTOR}
+}
+
+@article{edlin2007voting,
+  title={Voting as a rational choice: Why and how people vote to improve the well-being of others},
+  author={Edlin, Aaron and Gelman, Andrew and Kaplan, Noah},
+  journal={Rationality and society},
+  volume={19},
+  number={3},
+  pages={293--314},
+  year={2007},
+  publisher={Sage Publications Sage UK: London, England}
+}
+
+@article{fowler2007beyond,
+  title={Beyond the self: Social identity, altruism, and political participation},
+  author={Fowler, James H and Kam, Cindy D},
+  journal={Journal of Politics},
+  volume={69},
+  number={3},
+  pages={813--827},
+  year={2007},
+  publisher={Wiley Online Library}
+}
+
+@article{gerber2009descriptive,
+  title={Descriptive social norms and motivation to vote: Everybody's voting and so should you},
+  author={Gerber, Alan S and Rogers, Todd},
+  journal={The Journal of Politics},
+  volume={71},
+  number={1},
+  pages={178--191},
+  year={2009},
+  publisher={Cambridge University Press New York, USA}
+}
+
+@article{feddersen2009moral,
+  title={Moral bias in large elections: theory and experimental evidence},
+  author={Feddersen, Timothy and Gailmard, Sean and Sandroni, Alvaro},
+  journal={American Political Science Review},
+  volume={103},
+  number={02},
+  pages={175--192},
+  year={2009},
+  publisher={Cambridge Univ Press}
+}
+
+@article{kroneberg2010norms,
+  title={Norms and rationality in electoral participation and in the rescue of Jews in WWII: An application of the model of frame selection},
+  author={Kroneberg, Clemens and Yaish, Meir and Stock{\'e}, Volker},
+  journal={Rationality and Society},
+  volume={22},
+  number={1},
+  pages={3--36},
+  year={2010},
+  publisher={Sage Publications Sage UK: London, England}
+}
+
+@article{gelman2012probability,
+  title={What is the probability your vote will make a difference?},
+  author={Gelman, Andrew and Silver, Nate and Edlin, Aaron},
+  journal={Economic Inquiry},
+  volume={50},
+  number={2},
+  pages={321--326},
+  year={2012},
+  publisher={Wiley Online Library}
+}
+
+@article{mcmurray2012aggregating,
+  title={Aggregating information by voting: The wisdom of the experts versus the wisdom of the masses},
+  author={McMurray, Joseph C},
+  journal={The Review of Economic Studies},
+  pages={rds026},
+  year={2012},
+  publisher={Oxford University Press}
+}
+\end{filecontents}
+\immediate\write18{bibtex paper}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\title{Rational Altruism}
+\author{Mike Izbicki}
+\begin{document}
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Voting}
+
+Let $P=\{p_1,...,p_n\}$ be a set of $n$ people.
+Let $X$ be a set of choices.%
+\footnote{
+    We are making no assumptions about the set of choices.
+    For example, it may by finite, countably infinite, or uncountable.
+    Similarly, it may have no special structure, or it may have an associated topology.
+}
+Each person $p_i$ has an associated loss function $\loss_i : X \to \Rnn$.
+The preferred choice for person $i$ is then given by
+\begin{equation}
+\xstar_i = \argmin_{\x\in X} \loss_i(\x)
+.
+\end{equation}
+In a voting scenario, each person selects some choice.
+We will denote the choice of person $i$ using strategy $s$ as $\xhats_i$.
+The naive voting strategy is to select the choice that corresponds to your minimum loss.
+That is,
+\begin{equation}
+\xhatn_i = \xstar_i
+.
+\end{equation}
+Arrow's impossibility theorem shows that this is a suboptimal strategy in many practical scenarios.
+
+To discuss better voting strategies, we need to first discuss how votes determine a choice.
+In particular, society selects some vote aggregation function $\T : \{P\times X\} \to X$. 
+This function takes as input the votes of the population and returns a choice.
+The most common aggregation function is first-past-the-post (also known as majority rules).
+To consider the optimal voting strategy, let us first assume that we have full knowledge of everyone else's vote.
+In particular, denote by $V_i : \{P\times X\}$ the set of all votes except the vote of person $i$.
+Then the oracle voting strategy is
+\begin{equation}
+\xhato_i = \argmin_{\x\in X} \loss_i(T(V_i\cup\{(p_i,\x)\}))
+.
+\end{equation}
+The oracle strategy obviously cannot actually be implemented in practice because the set $V_i$ is unknowable.
+
+A realistic strategy would be to approximate the set $V_i$ using our knowledge of how other people are likely to vote.
+We begin by assuming all voters are perfectly rational and have unbounded computational power.
+Denote by 
+\begin{equation}
+\begin{split}
+\xhatr_i{}^{,j} &= \argmin_{\x\in X} \loss_i(T(\Vhat^{j-1} \cup \{(p_i,\x_i)\})) \\
+\Vhat^0 &= \{(p_i,x_i) : i \in [n]\} \\
+\Vhat^j &= \{(p_i,\xhatr_i{}^{,j}) : i \in [n]\}
+\end{split}
+\end{equation}
+
+\begin{conj}
+Under reasonable assumptions, the sequence $\Vhat^j$ converges.
+The converged solution is pareto optimal.
+\end{conj}
+In reality, most voters will not act rationally.
+We ignore this for now.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Social good}
+
+For each person $i$, denote by $\lambda_i : X \to \Rnn$ the intrinsic loss of a choice.
+The intrinsic losses of a person are not allowed to depend on any other person.
+We can now define social loss functions.
+Here are some examples:
+
+\begin{align}
+\slossmax(x) &= \max \{ \lambda_p (\x) : p \in P \}
+\\
+\slossave(x) &= \frac{1}{n}\sum_{p\in P} \lambda_p (\x)
+\\
+\slossvar(x) &= \frac{1}{n}\sum_{p\in P} (\lambda_p(\x) - \slossave(x))^2
+\\
+\slossvarp(x) &= \frac{1}{n}\sum_{p\in P} (\max\{\lambda_p(\x) - \slossave(x),0\})^2
+\end{align}
+
+%Let $P$ be divided into two disjoint sets $P_1$ and $P_2$.
+%
+%\begin{equation}
+%(x) = 
+%\end{equation}
+
+%\begin{equation}
+%S_\gamma(x) = \sloss(x) + \gamma \left( \slossmax(x) - \slossave(x) \right)
+%\end{equation}
+
+An altruist would decide to minimize some social loss function instead of their own personal loss function.
+That is the altruist's loss $\loss_i = S$.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Randomness}
+
+Let $\D$ be the space of univariate probability distributions with support on $\Rnn$.
+We now generalize the above discussion so that the loss function has type $\loss_i : X \to \D$.
+The intended interpretation is that the loss of a given choice is no longer fixed;
+instead it follows some distribution.
+This distribution may capture inherent randomness in the process,
+or if the process is non-stochastic it might capture our uncertainty about the problem.
+In this setting, there is no one preferred choice.
+There is a family of possible choices that sit along a bias-variance curve.
+
+As before, assume all votes except for person $i$ are fixed.
+Then
+\begin{equation}
+%\xhato_i = \argmin_{\x\in X} \loss_i(T(V_i\cup\{(p_i,\x)\}))
+\sloss(\T(\V_i)) - \sloss(\T(\V_i\cup\{(p_i,\x)\}))
+\end{equation}
+is now a random variable.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\clearpage
+
+\section{References}
+
+Condorcet provide an argument that voting is an optimal decision making strategy in the 1700s.
+
+\cite{feddersen1996swing} present the swing voter's curse.
+That is, less informed voters can strictly prefer to abstain from voting even when voting is costless and they have a strict preference of candidates.
+\cite{mcmurray2012aggregating} builds on this work to show that in equilibrium, the number of people who choose to vote is optimal.
+Furthermore, when someone becomes more informed, they cause other people to become less likely to vote.
+
+Is auction theory relevant?
+
+\cite{edlin2007voting} makes the case that non-selfish behavior motivates voters, and this results in good voter turnout.
+
+\cite{fowler2007beyond} discuss a model that distinguishes ``altruistic'' social interactions and ``identity'' social actions.
+
+\cite{gerber2009descriptive} present empirical evidence that discussing low voter turnout rates causes lower turnout rates, and talking about high turnout rates causes higher turnout rates.
+The resulting conclusion is that people decide to vote/not vote similarly to how other people decide to.
+
+\cite{feddersen2009moral} claims that larger elections cause the participants to behave more morally.
+They provide both a theoretical model and experiments.
+
+\cite{kroneberg2010norms} argue that norms are a major cause of voter turnout.
+They present a psychological model called the Model of Frame Selection to justify their claim.
+
+\cite{gelman2012probability} calculate the probability that an individual vote makes a difference in the 2008 US election based on survey data.
+\bibliographystyle{plainnat}
+\bibliography{paper}
+
+\end{document}
